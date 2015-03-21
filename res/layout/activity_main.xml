@@ -24,12 +24,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" >
 
-                <LinearLayout
+                <com.clock.clock.TimeView
                     android:id="@+id/tabTime"
                      android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" >
-                </LinearLayout>
+                    
+                    <TextView
+                        	android:id="@+id/tvTime" 
+                        	android:textAppearance="?android:attr/textAppearanceLarge"
+                        	android:layout_width="fill_parent" 
+                         	android:layout_height="fill_parent" 
+                         	android:gravity="center"/>
+                </com.clock.clock.TimeView>
 
                 <LinearLayout
                     android:id="@+id/tabAlarm"
