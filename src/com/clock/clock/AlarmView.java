@@ -3,12 +3,18 @@ package com.clock.clock;
 import java.util.Calendar;
 import java.util.Date;
 
+import android.app.AlarmManager;
+import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -18,23 +24,32 @@ import android.widget.TimePicker;
 public class AlarmView extends LinearLayout 
 {	
 	private Button btnAddAlarm;
-	private ListView lvAlarmlist;
+	private ListView lvAlarmList;
 	private static final String KEY_ALARM_LIST = "alarmList";
 	private ArrayAdapter<AlarmData> adapter;
+	private AlarmManager alarmManager;
 	
 	public AlarmView(Context context, AttributeSet attrs, int defStyleAttr) 
 	{
 		super(context, attrs, defStyleAttr);
+		init();
 	}
 
 	public AlarmView(Context context, AttributeSet attrs) 
 	{
 		super(context, attrs);
+		init();
 	}
 
 	public AlarmView(Context context) 
 	{
 		super(context);
+		init();
+	}
+	
+	private void init()
+	{
+		alarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
 	}
 	
 	protected void onFinishInflate()
@@ -42,10 +57,10 @@ public class AlarmView extends LinearLayout
 		super.onFinishInflate();
 		
 		this.btnAddAlarm = (Button) findViewById(R.id.btnAddAlarm);
-		this.lvAlarmlist = (ListView) findViewById(R.id.lvAlarmList);
+		this.lvAlarmList = (ListView) findViewById(R.id.lvAlarmList);
 		
 		adapter = new ArrayAdapter<AlarmView.AlarmData>(getContext(),android.R.layout.simple_list_item_1);
-		this.lvAlarmlist.setAdapter(adapter);
+		this.lvAlarmList.setAdapter(adapter);
 		readSavedAlarmList();
 		
 		
@@ -57,6 +72,37 @@ public class AlarmView extends LinearLayout
 				addAlarm();
 			}
 		});
+		
+		lvAlarmList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+
+			@Override
+			public boolean onItemLongClick(AdapterView<?> parent, View view,
+					final int position, long id) {
+				new AlertDialog.Builder(getContext()).setTitle("options").setItems(new CharSequence[]{"delete"}, new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						switch(which){
+						case 0:
+							deleteAlarm(position);
+							break;
+							
+						default:
+							break;
+						}
+					}
+				}).setNegativeButton("cancel", null).show();
+				
+				return false;
+			}
+			
+		});
+	}
+	
+	private void deleteAlarm(int position)
+	{
+		adapter.remove(adapter.getItem(position));
+		saveAlarmList();
 	}
 	
 	private void addAlarm()
@@ -77,6 +123,7 @@ public class AlarmView extends LinearLayout
 					calendar.setTimeInMillis(calendar.getTimeInMillis()+24*60*60*1000);
 				}
 				adapter.add(new AlarmData(calendar.getTimeInMillis()));
+				alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 5*60*1000, PendingIntent.getBroadcast(getContext(), 0, new Intent(getContext(),AlarmReceiver.class), 0));
 				saveAlarmList();
 			}
 		}, c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), true).show();
