@@ -1,8 +1,6 @@
 package com.clock.clock;
 
 import java.util.Calendar;
-import java.util.Date;
-
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
@@ -155,7 +153,7 @@ public class AlarmView extends LinearLayout
 		{
 			String content = sb.toString().substring(0,sb.length()-1);
 			
-			editor.putString(this.KEY_ALARM_LIST, content);
+			editor.putString(AlarmView.KEY_ALARM_LIST, content);
 			
 			System.out.println(content);
 		}
@@ -170,7 +168,7 @@ public class AlarmView extends LinearLayout
 	private void readSavedAlarmList()
 	{
 		SharedPreferences sp = getContext().getSharedPreferences(AlarmView.class.getName(), Context.MODE_PRIVATE);
-		String content= sp.getString(this.KEY_ALARM_LIST, null);
+		String content= sp.getString(AlarmView.KEY_ALARM_LIST, null);
 		
 		if(content!=null)
 		{
@@ -190,7 +188,6 @@ public class AlarmView extends LinearLayout
 		private Calendar date;
 		
 		
-		@SuppressWarnings("deprecation")
 		public AlarmData(long time)
 		{
 			this.time = time;
