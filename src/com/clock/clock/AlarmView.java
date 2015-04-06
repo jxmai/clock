@@ -5,6 +5,8 @@ import java.util.Date;
 
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -17,6 +19,7 @@ public class AlarmView extends LinearLayout
 {	
 	private Button btnAddAlarm;
 	private ListView lvAlarmlist;
+	private static final String KEY_ALARM_LIST = "alarmList";
 	private ArrayAdapter<AlarmData> adapter;
 	
 	public AlarmView(Context context, AttributeSet attrs, int defStyleAttr) 
@@ -43,6 +46,7 @@ public class AlarmView extends LinearLayout
 		
 		adapter = new ArrayAdapter<AlarmView.AlarmData>(getContext(),android.R.layout.simple_list_item_1);
 		this.lvAlarmlist.setAdapter(adapter);
+		readSavedAlarmList();
 		
 		
 		btnAddAlarm.setOnClickListener(new View.OnClickListener() 
@@ -73,8 +77,44 @@ public class AlarmView extends LinearLayout
 					calendar.setTimeInMillis(calendar.getTimeInMillis()+24*60*60*1000);
 				}
 				adapter.add(new AlarmData(calendar.getTimeInMillis()));
+				saveAlarmList();
 			}
 		}, c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), true).show();
+	}
+	
+	private void saveAlarmList()
+	{
+		Editor editor = getContext().getSharedPreferences(AlarmView.class.getName(), Context.MODE_PRIVATE).edit();
+		
+		StringBuffer sb = new StringBuffer();
+		
+		for(int i = 0; i< adapter.getCount();i++)
+		{
+			sb.append(adapter.getItem(i).getTime()).append(",");
+		}
+		
+		String content = sb.toString().substring(0,sb.length()-1);
+		
+		editor.putString(this.KEY_ALARM_LIST, content);
+		
+		System.out.println(content);
+		editor.commit();
+	}
+	
+	
+	private void readSavedAlarmList()
+	{
+		SharedPreferences sp = getContext().getSharedPreferences(AlarmView.class.getName(), Context.MODE_PRIVATE);
+		String content= sp.getString(this.KEY_ALARM_LIST, null);
+		
+		if(content!=null)
+		{
+			String[] timeStrings = content.split(",");
+			for(String string: timeStrings)
+			{
+				adapter.add(new AlarmData(Long.parseLong(string)));
+			}
+		}
 	}
 	
 	private static class AlarmData
@@ -93,7 +133,6 @@ public class AlarmView extends LinearLayout
 			date = Calendar.getInstance();
 			date.setTimeInMillis(time);
 			this.timeLabel = String.format("%d-%d-%d:%d", date.get(Calendar.MONTH), date.get(Calendar.DAY_OF_MONTH), date.get(Calendar.HOUR_OF_DAY), date.get(Calendar.MINUTE));
-					
 		}
 		
 		public long getTime()
