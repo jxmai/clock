@@ -73,7 +73,7 @@
                         <EditText 
                             android:id="@+id/etHour"
                             android:textAppearance="?android:attr/textAppearanceLarge"
-                            android:width="0dp" 
+                            android:layout_width="0dp" 
                             android:layout_height="wrap_content"
                             android:layout_weight="1" />
                         
@@ -85,7 +85,7 @@
                         <EditText 
                             android:id="@+id/etMin"
                             android:textAppearance="?android:attr/textAppearanceLarge"
-                            android:width="0dp" 
+                            android:layout_width="0dp" 
                             android:layout_height="wrap_content"
                             android:layout_weight="1" /> 
                             
@@ -99,7 +99,7 @@
                         <EditText 
                             android:id="@+id/etSec"
                             android:textAppearance="?android:attr/textAppearanceLarge"
-                            android:width="0dp" 
+                            android:layout_width="0dp" 
                             android:layout_height="wrap_content"
                             android:layout_weight="1" /> 
                  
