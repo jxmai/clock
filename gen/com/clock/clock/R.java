@@ -25,15 +25,20 @@ public final class R {
         public static final int ic_launcher=0x7f020000;
     }
     public static final class id {
-        public static final int action_settings=0x7f09000b;
+        public static final int action_settings=0x7f090010;
         public static final int btnAddAlarm=0x7f090005;
+        public static final int btnGroup=0x7f09000a;
+        public static final int btnPause=0x7f09000c;
+        public static final int btnReset=0x7f09000e;
+        public static final int btnResume=0x7f09000d;
+        public static final int btnStart=0x7f09000b;
         public static final int container=0x7f090000;
         public static final int etHour=0x7f090007;
         public static final int etMin=0x7f090008;
         public static final int etSec=0x7f090009;
         public static final int lvAlarmList=0x7f090004;
         public static final int tabAlarm=0x7f090003;
-        public static final int tabStopWatch=0x7f09000a;
+        public static final int tabStopWatch=0x7f09000f;
         public static final int tabTime=0x7f090001;
         public static final int tabTimer=0x7f090006;
         public static final int tvTime=0x7f090002;
@@ -53,7 +58,11 @@ public final class R {
         public static final int add_alarm=0x7f060003;
         public static final int app_name=0x7f060000;
         public static final int hello_world=0x7f060001;
+        public static final int pause=0x7f060006;
         public static final int play_sound=0x7f060004;
+        public static final int reset=0x7f060008;
+        public static final int resume=0x7f060007;
+        public static final int start=0x7f060005;
     }
     public static final class style {
         /** 
